@@ -2,9 +2,9 @@
   <java.util.HashMap_-Values>
     <outer-class>
       <entry>
-        <long>0</long>
+        <long>1</long>
         <models.User>
-          <id>0</id>
+          <id>1</id>
           <firstName>Kevin</firstName>
           <lastName>O&apos;Keeffe</lastName>
           <age>33</age>
@@ -14,9 +14,9 @@
         </models.User>
       </entry>
       <entry>
-        <long>1</long>
+        <long>2</long>
         <models.User>
-          <id>1</id>
+          <id>2</id>
           <firstName>Diarmuid</firstName>
           <lastName>O&apos;Keeffe</lastName>
           <age>30</age>

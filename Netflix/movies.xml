@@ -1,0 +1,24 @@
+<object-stream>
+  <java.util.HashMap_-Values>
+    <outer-class>
+      <entry>
+        <long>1</long>
+        <models.Movie>
+          <id>1</id>
+          <title>Mad Max</title>
+          <year>2015</year>
+          <url>www.madmax.com</url>
+        </models.Movie>
+      </entry>
+      <entry>
+        <long>2</long>
+        <models.Movie>
+          <id>2</id>
+          <title>There Will Be Blood</title>
+          <year>2008</year>
+          <url>www.therewillbeblood.com</url>
+        </models.Movie>
+      </entry>
+    </outer-class>
+  </java.util.HashMap_-Values>
+</object-stream>
