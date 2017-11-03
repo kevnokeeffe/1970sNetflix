@@ -4,7 +4,7 @@
     <vector>
       <default>
         <capacityIncrement>0</capacityIncrement>
-        <elementCount>16</elementCount>
+        <elementCount>43</elementCount>
         <elementData>
           <map>
             <entry>
@@ -69,13 +69,15 @@
             </entry>
             <entry>
               <long>6</long>
-              <models.Movie>
+              <models.User>
                 <id>6</id>
-                <title>Shanghai Triad (Yao a yao yao dao waipo qiao) (1995)</title>
-                <year>01-Jan-1995</year>
-                <url>http://us.imdb.com/Title?Yao+a+yao+yao+dao+waipo+qiao+(1995)</url>
-                <route/>
-              </models.Movie>
+                <firstName>Kevin</firstName>
+                <lastName>O&apos;Keeffe</lastName>
+                <age>33</age>
+                <gender>Male</gender>
+                <occupation>student</occupation>
+                <userid>4535454jhn</userid>
+              </models.User>
             </entry>
             <entry>
               <long>7</long>
@@ -114,6 +116,26 @@
                 <title>Richard III (1995)</title>
                 <year>22-Jan-1996</year>
                 <url>http://us.imdb.com/M/title-exact?Richard%20III%20(1995)</url>
+                <route/>
+              </models.Movie>
+            </entry>
+            <entry>
+              <long>11</long>
+              <models.Movie>
+                <id>11</id>
+                <title>hANS</title>
+                <year>5555</year>
+                <url>TTTTT</url>
+                <route/>
+              </models.Movie>
+            </entry>
+            <entry>
+              <long>12</long>
+              <models.Movie>
+                <id>12</id>
+                <title>Star Trek</title>
+                <year>1994</year>
+                <url>rty</url>
                 <route/>
               </models.Movie>
             </entry>
@@ -219,6 +241,16 @@
                 <route/>
               </models.Movie>
             </entry>
+            <entry>
+              <long>11</long>
+              <models.Movie>
+                <id>11</id>
+                <title>Star Trek</title>
+                <year>2009</year>
+                <url>www.startrek.com</url>
+                <route/>
+              </models.Movie>
+            </entry>
           </map>
           <map reference="../map[2]"/>
           <map reference="../map"/>
@@ -232,8 +264,68 @@
           <map reference="../map"/>
           <map reference="../map"/>
           <map reference="../map[2]"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
           <map reference="../map"/>
           <map reference="../map[2]"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <map reference="../map"/>
+          <map reference="../map[2]"/>
+          <map reference="../map"/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
+          <null/>
           <null/>
           <null/>
           <null/>

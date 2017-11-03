@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.base.Optional;
+
 import controlers.NetflixAPI;
 import static models.Fixtures.users;
 import static models.Fixtures.movies;
@@ -19,7 +21,6 @@ import static models.Fixtures.ratings;
 
 public class TestNetflixAPI {
 	
-
 	
 	  private NetflixAPI netflix;
 
@@ -41,7 +42,7 @@ public class TestNetflixAPI {
 	      netflix.addMovie(movie.title, movie.year, movie.url);
 	    }
 	  }
-	  
+	  @Before
 	  public void setup3()
 	  {
 	    netflix = new NetflixAPI();
@@ -60,32 +61,57 @@ public class TestNetflixAPI {
 	  @Test
 	  public void testUser()
 	  {
-	    assertEquals (users.length, netflix.getUsers().size());
+		User cathrine = new User("Cathrine", "O'Keeffe", "60", "Female", "Magic", "764456G");  
+		
+	    assertEquals (0, netflix.getUsers().size());
 	    netflix.createUser("Cathrine", "O'Keeffe", "60", "Female", "Magic", "764456G");
-	    assertEquals (users.length+1, netflix.getUsers().size());
-	    assertEquals (users[0], netflix.getUserByUserID(users[0].userid));
+	    assertEquals (cathrine, netflix.getUserByUserID("Cathrine"));
 	  }  
 
 	  @Test
 	  public void testUsers()
 	  {
-	    assertEquals (users.length, netflix.getUsers().size());
-	    for (User user: users)
-	    {
-	      User eachUser = netflix.getUserByUserID(user.userid);
-	      assertEquals (user, eachUser);
-	      assertNotSame(user, eachUser);
-	    }
+		  netflix.createUser("Cathrine", "O'Keeffe", "60", "Female", "Magic", "764456G");
+		  netflix.createUser("Cathrine", "O'Keeffe", "60", "Female", "Magic", "764456G");
+		  netflix.createUser("Cathrine", "O'Keeffe", "60", "Female", "Magic", "764456G");
+		  netflix.createUser("Cathrine", "O'Keeffe", "60", "Female", "Magic", "764456G");
+		  assertEquals (users.length, netflix.getUsers().size());
+		    for (User cat: users)
+		    {
+		      User eachUser = netflix.getUserByName(cat.userid);
+		      assertEquals (cat, eachUser);
+		      assertNotSame(cat, eachUser);
+		    }
 	  }
 
 	  @Test
 	  public void testDeleteUsers()
 	  {
-	    assertEquals (users.length, netflix.getUsers().size());
-	    User marge = netflix.getUserByUserID("secret");
-	    netflix.deleteUser(marge.id);
-	    assertEquals (users.length-1, netflix.getUsers().size());    
+		  netflix.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "7644307G");
+		  netflix.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "7644307G");
+		  netflix.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "7644307G");
+		  netflix.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "7644307G");
+		  assertEquals (users.length, netflix.getUsers().size());
+		    User Kevin = netflix.getUserByName("Kevin");
+		    netflix.deleteUser(Kevin.id);
+		    assertEquals (users.length-1, netflix.getUsers().size());  
+		  
+		  
 	  }
+	  /*
+	  public User createUser(Long id, String fname, String lname, String age,String gender,String occupation,String userid)
+	  {
+	    User user = null;
+	    Optional<User> users = Optional.fromNullable(userIndex.get(id));
+	    if (user.isPresent())
+	    {
+	      user = new User ( fname, lname, age, gender, occupation, userid);
+	      user.get().users.put(user.id, user);
+	      userIndex.put(user.id, user);
+	    }
+	    return user;
+	  }
+	  */
 }
 	  
 	  

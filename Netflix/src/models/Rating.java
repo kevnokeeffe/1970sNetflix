@@ -11,7 +11,7 @@ public class Rating {
 	static Long counter = (long) 01;
 	
 	public Long id;
-	public String rating;
+	//public String rating;
 	public String rat1,rat2,rat3,rat4;
 	
 	
@@ -59,7 +59,7 @@ public class Rating {
 	      return Objects.equal(rat1, other.rat1) 
 	          && Objects.equal(rat2,  other.rat2)
 	          && Objects.equal(rat3,     other.rat3)
-	          && Objects.equal(rat3,  other.rat4);
+	          && Objects.equal(rat4,  other.rat4);
 	          
 	      
 	    }

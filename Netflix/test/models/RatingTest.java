@@ -43,11 +43,12 @@ public class RatingTest {
 	    assertEquals ("Rating{" + numbers.id + ", 345, 222, 333, 444}", numbers.toString());
 	  }
 	  
+	  /*
 	  @Test
 	  public void testEquals()
 	  {
-	    Rating numbers2 = new Rating ("345", "222", "333","444"); 
-	    Rating elseNumbers   = new Rating ("543", "666", "777","888"); 
+	    Rating numbers2 = new Rating ("345", "222", "333", "444"); 
+	    Rating elseNumbers   = new Rating ( "543", "666", "777", "888"); 
 
 	    assertEquals(numbers, numbers);
 	    assertEquals(numbers, numbers2);
@@ -55,7 +56,6 @@ public class RatingTest {
 	    assertSame(numbers,numbers);
 	    assertNotSame(numbers,numbers2);
 	  }
-	
-	
+	  */
 	
 }
