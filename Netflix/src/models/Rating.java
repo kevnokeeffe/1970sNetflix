@@ -12,25 +12,31 @@ public class Rating {
 	
 	public Long id;
 	//public String rating;
-	public String rat1,rat2,rat3,rat4;
+	public Long rat1 = 0L;
+	public Long rat2 = 0L;
+	public Float rat3;
 	
 	
 	
 	
-	public Rating(String rat1, String rat2, String rat3, String rat4)
+	
+	// Rating
+	public Rating(Long rat1, Long rat2, Float rat3)
 	  {
 		this.id        	= counter++;
 	    this.rat1	= rat1;
 	    this.rat2 	= rat2;
 	    this.rat3 	= rat3;
-	    this.rat4 	= rat4;
+	    
 	    
 	    
 	    
 	  }
+	
 	public Rating()
 	  {
 	  }
+	//ToString
 	@Override
 	  public String toString()
 	  {
@@ -38,18 +44,18 @@ public class Rating {
 	    							.addValue(rat1)
 	                               .addValue(rat2)
 	                               .addValue(rat3)
-	                               .addValue(rat4)  
+	                                 
 	                               .toString();
 	  }
 	
-	
+	//Hash
 	@Override  
 	  public int hashCode()  
 	  {  
-	     return Objects.hashCode(this.id, this.rat1, this.rat2, this.rat3 , this.rat4);  
+	     return Objects.hashCode(this.id, this.rat1, this.rat2, this.rat3 );  
 	  } 
 	
-	
+	//Equals to
 	@Override
 	  public boolean equals(final Object obj)
 	  {
@@ -59,7 +65,7 @@ public class Rating {
 	      return Objects.equal(rat1, other.rat1) 
 	          && Objects.equal(rat2,  other.rat2)
 	          && Objects.equal(rat3,     other.rat3)
-	          && Objects.equal(rat4,  other.rat4);
+	          ;
 	          
 	      
 	    }

@@ -1,6 +1,8 @@
 package models;
 
-//import java.util.HashMap;
+import java.util.HashMap;
+import java.util.Map;
+
 //import java.util.Map;
 //import java.util.Objects;
 import com.google.common.base.Objects;
@@ -16,31 +18,55 @@ public class User {
 	public String age;
 	public String gender;
 	public String occupation;
-	public String userid;
+	public String email;
+	public Map<Long,Rating> rating = new HashMap<>();
+	public String role;
+	public String password;
+	
+	 public User(String firstName, String lastName, String age, String gender,
+				String occupation, String email)
+	  {
+	    this(firstName, lastName, age, gender, occupation, email,  "default");
+	  }
 
+	 
+	 
+	// NetflixAPI.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "admin")
+	 
 	public User(String firstName, String lastName, String age, String gender,
-			String occupation, String userid) {
+			String occupation, String email,String role) {
 		this.id = counter++;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 		this.gender = gender;
 		this.occupation = occupation;
-		this.userid = userid;
-
+		this.email = email;
+		this.role = role;
 	}
 
 	@Override
 	public String toString() {
-		return toStringHelper(this).addValue(id).addValue(firstName)
-				.addValue(lastName).addValue(age).addValue(gender)
-				.addValue(occupation).addValue(userid).toString();
+		return toStringHelper(this).addValue(id)
+				.addValue(firstName)
+				.addValue(lastName)
+				.addValue(age)
+				.addValue(gender)
+				.addValue(occupation)
+				.addValue(email)
+				.addValue(role)
+				.toString();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(this.id, this.firstName, this.lastName,
-				this.age, this.gender, this.occupation, this.userid);
+		return Objects.hashCode(this.id, 
+				this.firstName, 
+				this.lastName,
+				this.age, 
+				this.gender, 
+				this.occupation, 
+				this.email);
 	}
 
 	@Override
@@ -52,12 +78,14 @@ public class User {
 					&& Objects.equal(age, other.age)
 					&& Objects.equal(gender, other.gender)
 					&& Objects.equal(occupation, other.occupation)
-					&& Objects.equal(userid, other.userid);
+					&& Objects.equal(email, other.email);
 
 		} else {
 			return false;
 		}
 
+		
+		
 	}
 
 }

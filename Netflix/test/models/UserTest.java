@@ -15,7 +15,7 @@ import org.junit.Test;
 
 public class UserTest
 {
-  User aedin = new User ("aedin", "o'keeffe", "0", "female",  "secret", "secret");
+  User aedin = new User ("aedin", "o'keeffe", "0", "female",  "secret", "secret","default");
 
   @Test
   public void testCreate()
@@ -26,6 +26,8 @@ public class UserTest
     assertEquals ("female",  			aedin.gender);   
     assertEquals ("secret",             aedin.occupation);
     assertEquals ("secret",             aedin.userid);
+    
+    assertEquals ("default",             aedin.role);
   }
   
   
@@ -49,8 +51,8 @@ public class UserTest
   @Test
   public void testEquals()
   {
-    User aedin2 = new User ("aedin", "o'keeffe", "0", "female",  "secret", "secret"); 
-    User bart   = new User ("bart", "simpson", "100", "male", "secret","secret"); 
+    User aedin2 = new User ("aedin", "o'keeffe", "0", "female",  "secret", "secret","default"); 
+    User bart   = new User ("bart", "simpson", "100", "male", "secret","secret","default"); 
 
     assertEquals(aedin, aedin);
     assertEquals(aedin, aedin2);
@@ -58,5 +60,22 @@ public class UserTest
     assertSame(aedin,aedin);
     assertNotSame(aedin,aedin2);
   }
+  
+  
+  /*
+  @Test
+  public void testUserLogin() {
+      // checking with lisa's login(admin)
+      assertTrue(pacemaker.login(users[1].email, users[1].password));
+      assertEquals(pacemaker.currentUser.get(), users[1]);
+      // check logout
+      pacemaker.logout();
+      assertEquals(pacemaker.currentUser, Optional.absent());
+      // check failed login
+      assertFalse(pacemaker.login(users[1].email, "wrongpass"));
+      assertEquals(pacemaker.currentUser, Optional.absent());
+  }*/
+  
+  
   
 }

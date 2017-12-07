@@ -1,17 +1,14 @@
 package models;
 
-//import java.util.HashMap;
-//import java.util.Map;
 
-//import org.junit.Test;
+import java.util.HashMap;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Objects;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
-//import static org.junit.Assert.assertEquals;
+
 
 public class Movie {
 
@@ -21,7 +18,8 @@ public class Movie {
 	public String year;
 	public String url;
 	
-	public List<Rating> route = new ArrayList<>();
+	
+	public Map<Long,Rating> rating = new HashMap<>();
 	
 	public Movie(String title, String year, String url)
 	  {
@@ -32,6 +30,7 @@ public class Movie {
 	    
 	  }
 	
+	//ToString
 	@Override
 	  public String toString()
 	  {
@@ -42,12 +41,14 @@ public class Movie {
 	    							.toString();
 	  }
 	
+	//Hash Code
 	@Override  
 	  public int hashCode()  
 	  {  
 	     return Objects.hashCode(this.id, this.title, this.year, this.url);  
 	  } 
 	
+	//Equals to
 	@Override
 	  public boolean equals(final Object obj)
 	  {

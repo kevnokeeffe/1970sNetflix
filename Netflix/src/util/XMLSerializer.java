@@ -13,6 +13,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class XMLSerializer implements Serializer
 {
 
+	@SuppressWarnings("rawtypes")
   private Stack stack = new Stack();
   private File file;
 
@@ -21,6 +22,7 @@ public class XMLSerializer implements Serializer
     this.file = file;
   }
 
+  @SuppressWarnings("unchecked")
   public void push(Object o)
   {
     stack.push(o);
@@ -42,13 +44,7 @@ public class XMLSerializer implements Serializer
       is = xstream.createObjectInputStream(new FileReader(file));
       stack = (Stack) is.readObject();
       
-      /*Object obj = is.readObject();
-      while (obj != null)
-      {
-        stack.push(obj);
-        obj = is.readObject();
-      }*/
-    }
+         }
     finally
     {
       if (is != null)
@@ -68,11 +64,8 @@ public class XMLSerializer implements Serializer
       os = xstream.createObjectOutputStream(new FileWriter(file));
       
       os.writeObject(stack);
-      /* while (!stack.empty())
-      {
-        os.writeObject(stack.pop());  
-      }*/
-    }
+          }
+    
     finally
     {
       if (os != null)

@@ -48,7 +48,7 @@ public class TestNetflixAPI {
 	    netflix = new NetflixAPI();
 	    for (Rating rating : ratings)
 	    {
-	      netflix.addRating(rating.rat1, rating.rat2, rating.rat3,rating.rat4);
+	      netflix.addRating(rating.rat1, rating.rat2, rating.rat3);
 	    }
 	  }
 
