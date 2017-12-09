@@ -1,7 +1,11 @@
 package controlers;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeSet;
 
 import util.Serializer;
 
@@ -32,50 +36,38 @@ private NetflixAPI netApi;
 	    this.name = name;
 	  }
 	  
-//Create User	  
-	  @Command(description = "Create a new User", abbrev = "createu")
-	  public void createUser(@Param(name = "first name") String firstName,
-			  				 @Param(name = "last name") String lastName,
-			  				 @Param(name = "age") String age, 
-			  				 @Param(name = "gender") String gender,
-			  				 @Param(name = "occupation") String occupation,
-			  				 @Param(name = "e-mail") String userid) {
-
-	    netApi.createUser(firstName, lastName, age, gender, occupation, userid);
-	  }
-
+				  
+	 
 	  
 //LOAD DATA
-			@Command // Load Data Movies / Users
+			@Command (description = "Load Data", abbrev = "load")// Load Data Movies / Users
 			public void LoadData() throws Exception{
 				
 				netApi.initialLoad();
+				netApi.initialLoadRat();
+				netApi.store();
 			}
 			
-			//Eight
-			@Command //Load Ratings
-			public void loadRatings() throws Exception{
-				netApi.initialLoadRat();
-			}
-	  
+				  
 			
 //ADD Users Movies Ratings	  
 	  //One 
 	  //Add a User Administrator Only
-	  @Command(description = "Add a User", abbrev = "addu")
-	  public void addUser(@Param(name = "name") String firstName, 
+	  @Command(description = "Add a User", abbrev = "newu")
+	  public void addUser(@Param(name = "first name") String firstName, 
 			  				@Param(name = "last name") String lastName,
 			  				@Param(name = "age") String age, 
 			  				@Param(name = "gender") String gender, 
 	  						@Param(name = "occupation") String occupation,
-	  						@Param(name = "e-mail") String userid)
+	  						@Param(name = "zip code") String zipcode,
+	  						@Param(name = "role") String role)
 	  {
-	    netApi.createUser(firstName, lastName, age, gender, occupation, userid);
+	    netApi.createUser(firstName, lastName, age, gender, occupation,zipcode, role);
 	  }
 	  
 	  //Two
 	  //Add a Movie Administrator Only
-	  @Command(description = "Add a Movie", abbrev = "addm" )
+	  @Command(description = "Add a Movie", abbrev = "newm" )
 	  public void addMovie(@Param(name = "name") String title, 
 			  				@Param(name = "last name") String year,
 			  				@Param(name = "age") String url)
@@ -98,52 +90,58 @@ private NetflixAPI netApi;
 //GETTERS	  
 	  
 	  // Get User By email
-	  @Command(description = "Get a Users detail", abbrev = "GetByEmail") // ****not sure what this will do****
-	  public void getUser(@Param(name = "email") String email) {
+	  @Command(description = "Get a User's detail", abbrev = "zip") // ****not sure what this will do****
+	  public void getUser(@Param(name = "email") String zipcode) {
 
-	    User user = netApi.getUserByEmail(email);
+	    User user = netApi.getUserByZip(zipcode);
 	    System.out.println(user);
 
 	  }
 	  
-	  // Get All Users
-	  @Command(description = "Get all users details") 
+	  	  
+	  @Command(description = "Get all users sorted by their Name", abbrev= "allusers")
 		public void getAllUsers() {
-			Collection<User> user = netApi.getUsers();
-			System.out.println(user);
-			
+			TreeSet<User> sortedUsers = new TreeSet<User>();
+			sortedUsers.addAll(netApi.getUsers());
+			Iterator<User> iter = sortedUsers.iterator();
+			while(iter.hasNext()) {
+				User u = iter.next();
+				System.out.println(u.firstName + " " + u.lastName);
+			}
 		}
 	  
-	  //Get Get All Users duplicate
-	  @Command(description = "Get all users details")
-	  public void getUsers() {
-		  Collection<User> users = netApi.getUsers();
-		  System.out.println(users);
-	  }
-	  
-	  /*
-	  public String getName() {
-	    return name;				Note to self.. This piece of code should not be here!
-	  }								Unused Method...
-	  */
-	  
-	  // Get All Movies
-	  @Command // Get All Movies
-		public void getAllMovies() {
-			Collection<Movie> movie = netApi.getMovies();
-			System.out.println(movie);
+	  @Command(description="Get a List of all movies sorted by there title", abbrev = "allmovies")
+		public void getMovies(){
+			TreeSet<Movie> sortedMovies = new TreeSet<Movie>();
+			sortedMovies.addAll(netApi.getMovies());
+			Iterator<Movie> iter = sortedMovies.iterator();
+			while(iter.hasNext()) {
+				Movie u = iter.next();
+				System.out.println(u.title);
+			}
 		}
-		
-		
+	  
+	  		
 		public void getMovieRats(){		
 		}
 		
-		// Get User By Name
-		@Command 
-		public void getUserByName(String fname) {
-			User user = netApi.getUserByName(fname);
-			System.out.println(user);
+		@Command(description = "Get Movie detail", abbrev = "movie")
+		  public void getMovie(@Param(name = "Movie") Long id) {
+		    Movie movie = netApi.getMovie(id);
+		    System.out.println(movie);
+		  }
+		
+		
+		@Command(description = "search a user by name", abbrev = "name")
+		public void getUserByName(String name) {
+			ArrayList<User> user = new ArrayList<User>();
+			user.addAll(netApi.getUsers());
+			for(int i = 0; i < user.size(); i++) {
+				if(user.get(i).firstName.toLowerCase().contains(name.toLowerCase())) {
+					System.out.println(user.get(i));
+				}
 			}
+	  }
 		
 		// Get Movie By Title
 		@Command 
@@ -152,35 +150,30 @@ private NetflixAPI netApi;
 			System.out.println(movie);
 		}	
 	  
-		@Command
-		public void getMovieByURL(String url){
-			Movie movie = netApi.getMovieByUrl(url);
-			System.out.println(movie);
-		}
 		
 		
 //DELETERS
 		
 	  //Delete User Administrator Only
-	  @Command(description = "Delete a User")
-	  public void deleteUser(@Param(name = "email") String email) {
+	  @Command(description = "Delete a User", abbrev = "delUser")
+	  public void deleteUser(@Param(name = "id") String id) {
 
-	    Optional<User> user = Optional.fromNullable(netApi.getUserByEmail(email));
+	    Optional<User> user = Optional.fromNullable(netApi.getUserByZip(id));
 	    if (user.isPresent()) {
 	      netApi.deleteUser(user.get().id);
 	    }
 	  }
 	  
-	  /*
-	  @Command(description = "Delete a Movie")
+	  
+	  @Command(description = "Delete a Movie", abbrev = "delMovie")
 	  public void deleteMovie(@Param(name = "Url") String url) {
 
-	    Optional<User> movie = Optional.fromNullable(netApi.getMovieByUrl(url));
+	    Optional<Movie> movie = Optional.fromNullable(netApi.getMovieByUrl(url));
 	    if (movie.isPresent()) {
-	      netApi.deleteMovie(movie.get().id);
+	      netApi.deleteMovie(movie.get().url);
 	    }
 	  }
-	  */
+	  
 		
 		
 	  

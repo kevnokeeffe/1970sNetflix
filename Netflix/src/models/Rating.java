@@ -11,12 +11,13 @@ public class Rating {
 	static Long counter = (long) 01;
 	
 	public Long id;
-	//public String rating;
 	public Long rat1 = 0L;
 	public Long rat2 = 0L;
-	public Float rat3;
+	public Float rat3 = 0F;
 	
-	
+	public Rating()
+	  {
+	  }
 	
 	
 	
@@ -33,9 +34,7 @@ public class Rating {
 	    
 	  }
 	
-	public Rating()
-	  {
-	  }
+	
 	//ToString
 	@Override
 	  public String toString()

@@ -1,8 +1,8 @@
 package models;
 
 
+import java.util.Comparator;
 import java.util.HashMap;
-
 import java.util.Map;
 
 import com.google.common.base.Objects;
@@ -10,16 +10,16 @@ import com.google.common.base.Objects;
 import static com.google.common.base.MoreObjects.toStringHelper;
 
 
-public class Movie {
+public class Movie implements Comparable<Movie>, Comparator<Movie>{
 
 	static Long counter = (long) 01;
 	public Long id;
 	public String title;
 	public String year;
 	public String url;
+	public double ratingSys = 0;
 	
-	
-	public Map<Long,Rating> rating = new HashMap<>();
+	public Map<Long,Rating> ratingM = new HashMap<>();
 	
 	public Movie(String title, String year, String url)
 	  {
@@ -65,5 +65,16 @@ public class Movie {
 	      return false;
 	    }
 	  }
+	
+	
+	//Compare to title to title
+	public int compareTo(Movie movie) {
+		return this.title.compareTo(movie.title);
+	}
+	
+	
+	public int compare(Movie s1, Movie s2) {
+		return (int) (s1.ratingSys - s2.ratingSys);
+	}
 	
 }

@@ -1,5 +1,6 @@
 package models;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import com.google.common.base.Objects;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
 
-public class User {
+public class User implements Comparable<User> {
 
 	static long counter = 1;
 	public long id;
@@ -18,31 +19,33 @@ public class User {
 	public String age;
 	public String gender;
 	public String occupation;
-	public String email;
+	public String zipcode;
+	public String role = "default";
 	public Map<Long,Rating> rating = new HashMap<>();
-	public String role;
-	public String password;
+	
+	
 	
 	 public User(String firstName, String lastName, String age, String gender,
-				String occupation, String email)
+				String occupation, String zipcode)
 	  {
-	    this(firstName, lastName, age, gender, occupation, email,  "default");
+	    this(firstName, lastName, age, gender, occupation, zipcode, "default");
 	  }
 
 	 
 	 
-	// NetflixAPI.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "admin")
+	
 	 
 	public User(String firstName, String lastName, String age, String gender,
-			String occupation, String email,String role) {
+			String occupation, String zipcode,String role) {
 		this.id = counter++;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 		this.gender = gender;
 		this.occupation = occupation;
-		this.email = email;
 		this.role = role;
+		this.zipcode = zipcode;
+	
 	}
 
 	@Override
@@ -53,9 +56,7 @@ public class User {
 				.addValue(age)
 				.addValue(gender)
 				.addValue(occupation)
-				.addValue(email)
-				.addValue(role)
-				.toString();
+				.addValue(zipcode +"\n").toString();
 	}
 
 	@Override
@@ -65,8 +66,9 @@ public class User {
 				this.lastName,
 				this.age, 
 				this.gender, 
-				this.occupation, 
-				this.email);
+				this.occupation,
+				this.zipcode
+				);
 	}
 
 	@Override
@@ -78,14 +80,18 @@ public class User {
 					&& Objects.equal(age, other.age)
 					&& Objects.equal(gender, other.gender)
 					&& Objects.equal(occupation, other.occupation)
-					&& Objects.equal(email, other.email);
+					&& Objects.equal(zipcode, other.zipcode);
+					
 
 		} else {
 			return false;
 		}
 
-		
-		
 	}
 
+	
+	public int compareTo(User user) {
+		return this.firstName.compareTo(user.firstName);
+	}
+	
 }

@@ -59,7 +59,7 @@ public class NetflixAPI {
 		Optional<Movie> movie = Optional.fromNullable(movieIndex.get(rat2));
 		if(movie.isPresent()&&user.isPresent()){
 			ratings = new Rating(rat1,rat2,rat3);
-			movie.get().rating.put(ratings.id, ratings);
+			movie.get().ratingM.put(ratings.id, ratings);
 			user.get().rating.put(ratings.id, ratings);
 			ratingIndex.put(ratings.id, ratings);
 		}
@@ -77,9 +77,19 @@ public class NetflixAPI {
 
 	//Add User
 	public User createUser(String firstName, String lastName, String age,
-			String gender, String occupation, String email, String role) {
-		User user = new User(firstName, lastName, age, gender, occupation,
-				email, role);
+			String gender, String occupation, String zipcode) {
+		User user = new User(firstName, lastName, age, gender, occupation,zipcode
+				);
+		userIndex.put(user.id, user);
+		useridIndex.put(firstName, user);
+		return user;
+	}
+	
+	//Add User Admin
+	public User createUser(String firstName, String lastName, String age,
+			String gender, String occupation, String zipcode,String role) {
+		User user = new User(firstName, lastName, age, gender, occupation,zipcode,role
+				);
 		userIndex.put(user.id, user);
 		useridIndex.put(firstName, user);
 		return user;
@@ -90,8 +100,8 @@ public class NetflixAPI {
 //LOGIN / LOGOUT
 	
 	//Login Method
-	public boolean login(String firstName, String lastName){
-		Optional<User> user = Optional.fromNullable(useridIndex.get(firstName));
+	public boolean login(Long id, String lastName){
+		Optional<User> user = Optional.fromNullable(userIndex.get(id));
 	    if (user.isPresent() && user.get().lastName.equals(lastName)) {
 	      currentUser = user;
 	      FileLogger.getLogger().log(currentUser.get().firstName + " logged in...");
@@ -118,7 +128,6 @@ public class NetflixAPI {
 	public void load() throws Exception {
 		serializer.read();
 		userIndex = (Map<Long, User>) serializer.pop();
-		
 		ratingIndex = (Map<Long, Rating>) serializer.pop();
 		movieIndex = (Map<Long, Movie>) serializer.pop();
 		// insert movie and ratings here too!!!!
@@ -143,7 +152,7 @@ public class NetflixAPI {
 		}
 
 		//Get User
-		public User getUser(Long id) {
+		public User getUserId(Long id) {
 		return userIndex.get(id);
 		}
 	
@@ -161,15 +170,27 @@ public class NetflixAPI {
 		public Rating getRating(Long id) {
 			return ratingIndex.get(id);
 		}
-
+		
+		/*
+		public Map<Long, Rating> getUserRating(long id) {
+			Optional<User> user = Optional.fromNullable(userIndex.get(id));
+			return user.get().userRatings;
+		}
+		
+		public Map<Long, Rating> getMovieRating(long id) {
+			Optional<Movie> movie = Optional.fromNullable(movieIndex.get(id));
+			return movie.get().theMoviesRatings;
+			
+	}
+*/
 		//Get Movie
 		public Movie getMovie(Long id) {
 			return movieIndex.get(id);
 		}
 		
 		//Get User userId
-		public User getUserByEmail(String email) {
-			return useridIndex.get(email);
+		public User getUserByZip(String zipcode) {
+			return useridIndex.get(zipcode);
 		}
 		
 		//Get User Name
@@ -214,6 +235,11 @@ public class NetflixAPI {
 		useridIndex.remove(user.firstName);
 	}
 
+	public void deleteMovie(String url) {
+		Movie movie = movieIndex.remove(url);
+		movieIndex.remove(movie.url);
+	}
+	
 	//Delete User Name
 	public void deleteUser(String name) {
 		User user = userIndex.remove(name);
@@ -244,8 +270,8 @@ public class NetflixAPI {
 			String[] userTokens = userDetails.split(delims);
 
 			if (userTokens.length == 7) {
-				createUser(userTokens[0], userTokens[1], userTokens[2],
-						userTokens[3], userTokens[4], userTokens[5],userTokens[6]);
+				createUser(userTokens[1], userTokens[2], userTokens[3],
+						userTokens[4], userTokens[5],userTokens[6]);
 			} else {
 				scanner.close();
 				throw new IOException("Invalid member length: "
