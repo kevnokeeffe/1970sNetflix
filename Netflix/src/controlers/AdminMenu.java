@@ -159,6 +159,7 @@ private NetflixAPI netApi;
 					System.out.println(movie.get(i));
 				}
 			}
+			
 	  }
 		
 //DELETERS
@@ -204,6 +205,14 @@ private NetflixAPI netApi;
 			return average;
 		}
 	  
+	  @Command(description = "List all ratings")
+		public void listRatings() {
+			Collection<Rating> ratings = netApi.getRatings();
+			for (Rating rating : ratings) {
+				System.out.println(rating);
+			}
+		}
+	  
 	  @Command(description = "Top 10 movies", abbrev="top10")
 		public void getTopTenMovies() {
 
@@ -213,6 +222,18 @@ private NetflixAPI netApi;
 			for (Movie mov : topTenMovies) {
 				score = netApi.averageMovieRating(mov.id);
 				System.out.println(topTenMovies.indexOf(mov) + 1 + ". " + mov.title + ", Score: " + score);
+			}
+		}
+	  
+	  @Command(description = "Top 5 movies", abbrev="top5")
+		public void getTopFiveMovies() {
+
+			List<Movie> topFiveMovies = netApi.getTopTenMovies();
+			double score;
+
+			for (Movie mov : topFiveMovies) {
+				score = netApi.averageMovieRating(mov.id);
+				System.out.println(topFiveMovies.indexOf(mov) + 1 + ". " + mov.title + ", Score: " + score);
 			}
 		}
 }

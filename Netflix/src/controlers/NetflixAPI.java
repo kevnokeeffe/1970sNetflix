@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.HashBasedTable;
@@ -24,11 +25,11 @@ import models.User;
 public class NetflixAPI {
 
 	
-	private Map<Long, User> userIndex = new HashMap<>();
-	private Map<String, User> useridIndex = new HashMap<>();
-	private Map<String, Movie> movieIdIndex = new HashMap<>();
-	private Map<Long, Movie> movieIndex = new HashMap<>();
-	private Map<Long, Rating> ratingIndex = new HashMap<>();
+	public Map<Long, User> userIndex = new HashMap<>();
+	public Map<String, User> useridIndex = new HashMap<>();
+	public Map<String, Movie> movieIdIndex = new HashMap<>();
+	public Map<Long, Movie> movieIndex = new HashMap<>();
+	public Map<Long, Rating> ratingIndex = new HashMap<>();
 //	private Map<String, Rating> ratingIdIndex = new HashMap<>();
 	
 	private Serializer serializer;
@@ -61,7 +62,7 @@ public class NetflixAPI {
 	
 	//Add Rating
 	public void addRating(Long rat1, Long rat2, Float rat3) {
-		Rating ratings = null;
+		Rating ratings;
 		Optional<User> user = Optional.fromNullable(userIndex.get(rat1));
 		Optional<Movie> movie = Optional.fromNullable(movieIndex.get(rat2));
 		if(movie.isPresent()&&user.isPresent()){
@@ -72,6 +73,7 @@ public class NetflixAPI {
 		}
 	}
 
+	
 	
 	//Add Movie
 	public Movie addMovie(String title, String year, String url) {
@@ -373,26 +375,38 @@ public class NetflixAPI {
 //RATINGS!!!
 	
 	// Get all ratings from a user
-		public List<Rating> getUserRatings(long userId) {
+		public List<Rating> getUserRatings(long rat1) {
 			List<Rating> userRatings = new ArrayList<>();
-			userRatings.addAll(ratingsTable.row(userId).values());
+			userRatings.addAll(ratingsTable.row(rat1).values());
 
 			return userRatings;
 		}
 
 		// Get all the ratings for a specific movie
-		public List<Rating> getAllRatingsForMovie(long movieId) {
+		public List<Rating> getAllRatingsForMovie(long rat2) {
 			List<Rating> ratingsMovie = new ArrayList<>();
-			ratingsMovie.addAll(ratingsTable.column(movieId).values());
+			ratingsMovie.addAll(ratingsTable.column(rat2).values());
 
 			return ratingsMovie;
 		}
 
 		// Remove rating for a movie from specific user
-		public Rating removeRating(long userId, long movieId) {
-			return ratingsTable.remove(userId, movieId);
+		public Rating removeRating(long rat1, long rat2) {
+			return ratingsTable.remove(rat1, rat2);
 		}
 
-		
-	
+		@SuppressWarnings("unchecked")
+		public void Top5Movies(long id){
+			 Map<Long,Movie> MovieIndex2 = new HashMap<>();
+			 MovieIndex2.putAll(movieIndex);
+			 
+			Optional<User> user = Optional.fromNullable(userIndex.get(id));
+			Set<Long> list;
+			list= ((HashMap<Long,User>) user.get().userRatings).keySet();
+			
+			Object[] list1 = list.toArray();
+			for(int i = 0; i < list1.length; i++){
+			MovieIndex2.remove(i);
+		}
+		}
 }

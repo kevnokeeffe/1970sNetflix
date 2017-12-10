@@ -22,6 +22,7 @@ public class User implements Comparable<User> {
 	public String zipcode;
 	public String role = "default";
 	public Map<Long,Rating> rating = new HashMap<>();
+	public Object userRatings;
 	
 	
 	

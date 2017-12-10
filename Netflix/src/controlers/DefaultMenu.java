@@ -110,7 +110,17 @@ public class DefaultMenu {
 			}
 		}
 	  
-	 
+	  @Command(description = "Top 5 movies", abbrev="top5")
+		public void getTopFiveMovies() {
+
+			List<Movie> topFiveMovies = netApi.getTopTenMovies();
+			double score;
+
+			for (Movie mov : topFiveMovies) {
+				score = netApi.averageMovieRating(mov.id);
+				System.out.println(topFiveMovies.indexOf(mov) + 1 + ". " + mov.title + ", Score: " + score);
+			}
+		}
 	  
 	  public String getName() {
 	    return name;

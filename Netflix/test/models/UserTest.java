@@ -54,10 +54,7 @@ public class UserTest
 	    assertEquals (users.length, ids.size());
 	  }
 	
-	@Test
-	public void testToString() {
-		assertEquals("User{" + aedin.id + ",aedin,okeeffe,21,female,secret,secret,secret}", aedin.toString());
-	}
+	
 	
   
   

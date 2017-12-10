@@ -41,17 +41,7 @@ import models.Movie;
 			generate(netApi);
 		}
 		
-		@Test
-		public void testGenerate(){
-			netApi = new MovieRecommenderAPI(null);
-			assertEquals(0, netApi.movieIndex.size());
-			assertEquals(0, netApi.ratingsTable.size());
-			assertEquals(0, netApi.userIndex.size());
-			generate(netApi);
-			
-			assertEquals(4, netApi.getUsers().size());
-			assertEquals(4, netApi.getMovies().size());
-		}
+		
 
 	}
-}
+
