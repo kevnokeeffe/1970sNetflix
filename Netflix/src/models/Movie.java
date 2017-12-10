@@ -18,7 +18,7 @@ public class Movie implements Comparable<Movie>, Comparator<Movie>{
 	public String year;
 	public String url;
 	public double ratingSys = 0;
-	
+	public double ratings;
 	public Map<Long,Rating> ratingM = new HashMap<>();
 	
 	public Movie(String title, String year, String url)
@@ -29,6 +29,14 @@ public class Movie implements Comparable<Movie>, Comparator<Movie>{
 	    this.url 		= url;
 	    
 	  }
+	
+	public Movie(String title, String year, String url, double ratings) {
+		this.id = counter++;
+		this.title = title;
+		this.year = year;
+		this.url = url;
+		this.ratings=ratings;
+	}
 	
 	//ToString
 	@Override
@@ -57,7 +65,8 @@ public class Movie implements Comparable<Movie>, Comparator<Movie>{
 	      final Movie other = (Movie) obj;
 	      return Objects.equal(title, other.title) 
 	          && Objects.equal(year,  other.year)
-	          && Objects.equal(url,     other.url);
+	          && Objects.equal(url,     other.url)
+	          && Objects.equal(ratings, other.ratings);
 	               
 	    }
 	    else
@@ -76,5 +85,6 @@ public class Movie implements Comparable<Movie>, Comparator<Movie>{
 	public int compare(Movie s1, Movie s2) {
 		return (int) (s1.ratingSys - s2.ratingSys);
 	}
+	
 	
 }

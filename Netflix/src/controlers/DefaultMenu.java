@@ -3,6 +3,7 @@ package controlers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 
 
@@ -14,6 +15,7 @@ import asg.cliche.Command;
 import asg.cliche.Param;
 import asg.cliche.Shell;
 import models.Movie;
+import models.Rating;
 import models.User;
 
 public class DefaultMenu {
@@ -49,8 +51,18 @@ public class DefaultMenu {
 			}
 	  }
 	  
+	  @Command(description = "Search a movie by name", abbrev = "title")
+		public void getMovieByTitle(String title) {
+			ArrayList<Movie> movie = new ArrayList<Movie>();
+			movie.addAll(netApi.getMovies());
+			for(int i = 0; i < movie.size(); i++) {
+				if(movie.get(i).title.toLowerCase().contains(title.toLowerCase())) {
+					System.out.println(movie.get(i));
+				}
+			}
+	  }
 	  
-	  @Command(description = "Get Movie detail", abbrev = "movie")
+	  @Command(description = "Get Movie detail by id", abbrev = "movie")
 	  public void getMovie(@Param(name = "Movie") Long id) {
 	    Movie movie = netApi.getMovie(id);
 	    System.out.println(movie);
@@ -58,7 +70,7 @@ public class DefaultMenu {
 	  
 	  
 	  @Command(description = "Add a rating", abbrev="addr")
-		public void addRating(@Param(name = "userId") Long rat1, @Param(name = "movieId") Long rat2, @Param(name = "rating") float rat3) {
+		public void addRating(@Param(name = "userId") Long rat1, @Param(name = "movieId") Long rat2, @Param(name = "rating") Float rat3) {
 			 //netApi.addRating(rat1, rat2, rat3){
 				 Optional<Movie> movie = Optional.fromNullable(netApi.getMovie(rat1));
 				    if (movie.isPresent()) {
@@ -90,6 +102,15 @@ public class DefaultMenu {
 			}
 		}
 	  
+	  @Command(description = "Get all ratings for a specific movie(movieId)", abbrev="gmr")
+		public void getAllRatingsForMovie(@Param(name = "movieId") long movieId) {
+			List<Rating> ratingsMovie = netApi.getAllRatingsForMovie(movieId);
+			for (Rating rat : ratingsMovie) {
+				System.out.println(rat);
+			}
+		}
+	  
+	 
 	  
 	  public String getName() {
 	    return name;

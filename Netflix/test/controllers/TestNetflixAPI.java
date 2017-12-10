@@ -30,9 +30,11 @@ public class TestNetflixAPI {
 	    netflix = new NetflixAPI();
 	    for (User user : users)
 	    {
-	      netflix.createUser(user.firstName, user.lastName, user.age, user.gender, user.occupation, user.userid);
+	      netflix.createUser(user.firstName, user.lastName, user.age, user.gender, user.occupation, user.zipcode);
 	    }
+	    
 	  }
+	  
 	  @Before
 	  public void setup2()
 	  {
@@ -65,7 +67,7 @@ public class TestNetflixAPI {
 		
 	    assertEquals (0, netflix.getUsers().size());
 	    netflix.createUser("Cathrine", "O'Keeffe", "60", "Female", "Magic", "764456G");
-	    assertEquals (cathrine, netflix.getUserByUserID("Cathrine"));
+	    assertEquals (cathrine, netflix.getUserByZip("764456G"));
 	  }  
 
 	  @Test
@@ -78,40 +80,46 @@ public class TestNetflixAPI {
 		  assertEquals (users.length, netflix.getUsers().size());
 		    for (User cat: users)
 		    {
-		      User eachUser = netflix.getUserByName(cat.userid);
+		      User eachUser = netflix.getUserByName(cat.zipcode);
 		      assertEquals (cat, eachUser);
 		      assertNotSame(cat, eachUser);
 		    }
 	  }
 
+	 
 	  @Test
-	  public void testDeleteUsers()
-	  {
-		  netflix.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "7644307G");
-		  netflix.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "7644307G");
-		  netflix.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "7644307G");
-		  netflix.createUser("Kevin", "O'Keeffe", "33", "Male", "Bar Man", "7644307G");
-		  assertEquals (users.length, netflix.getUsers().size());
-		    User Kevin = netflix.getUserByName("Kevin");
-		    netflix.deleteUser(Kevin.id);
-		    assertEquals (users.length-1, netflix.getUsers().size());  
-		  
-		  
-	  }
-	  /*
-	  public User createUser(Long id, String fname, String lname, String age,String gender,String occupation,String userid)
-	  {
-	    User user = null;
-	    Optional<User> users = Optional.fromNullable(userIndex.get(id));
-	    if (user.isPresent())
-	    {
-	      user = new User ( fname, lname, age, gender, occupation, userid);
-	      user.get().users.put(user.id, user);
-	      userIndex.put(user.id, user);
-	    }
-	    return user;
-	  }
-	  */
+		public void testRemoveUser() throws Exception{
+			assertEquals(users.length, netflix.getUsers().size());
+			User kevin = netflix.createUser("Damian", "Mamak", "21", "male", "cook", "CL234", "4321");
+			assertEquals(users.length+1, netflix.getUsers().size());
+			netflix.removeUser(4l);
+			assertEquals(users.length,netflix.getUsers().size());
+		}
+	  
+	  @Test
+		public void testUserLogin() {
+			//Checking with kevin login
+			assertTrue(netflix.login(users[0].id, users[0].lastName));
+			assertEquals(netflix.currentUser.get(), users[0]);
+			
+			//check logout
+			netflix.logout();
+			assertEquals(netflix.currentUser, Optional.absent());
+			
+			//check login fail
+			assertFalse(netflix.login(users[0].id, "paddy"));
+			assertEquals(netflix.currentUser, Optional.absent());
+			
+		}
+	  
+	  @Test
+		public void testRemoveMovie() throws Exception{
+			assertEquals(movies.length, netflix.getMovies().size());
+			Movie terminator = netflix.addMovie("Terminator", "1984", "http://www.imdb.com/title/tt0088247/");
+			assertEquals(movies.length, netflix.getMovies().size());
+			netflix.deleteMovieId(terminator);
+			assertEquals(movies.length, netflix.getMovies().size());	
+		}
 }
 	  
 	  

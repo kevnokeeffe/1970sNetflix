@@ -1,15 +1,18 @@
 package controlers;
 
-import java.awt.List;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
 import util.Serializer;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.HashBasedTable;
 
 import models.Movie;
 import models.Rating;
@@ -19,7 +22,7 @@ import asg.cliche.Param;
 
 public class AdminMenu {
 
-	
+	public HashBasedTable<Long, Long, Rating> ratingsTable = HashBasedTable.create();
 	
 private String name;	//Should be used at some point
 private NetflixAPI netApi;
@@ -40,14 +43,15 @@ private NetflixAPI netApi;
 	 
 	  
 //LOAD DATA
-			@Command (description = "Load Data", abbrev = "load")// Load Data Movies / Users
-			public void LoadData() throws Exception{
+	  @Command (description = "Load Data", abbrev = "load")// Load Data Movies / Users
+		public String load() throws Exception{
 				
 				netApi.initialLoad();
 				netApi.initialLoadRat();
 				netApi.store();
-			}
 			
+				return "Information about users, movies and ratings loaded.";
+}
 				  
 			
 //ADD Users Movies Ratings	  
@@ -63,6 +67,7 @@ private NetflixAPI netApi;
 	  						@Param(name = "role") String role)
 	  {
 	    netApi.createUser(firstName, lastName, age, gender, occupation,zipcode, role);
+	    System.out.println("User Created:"+firstName+" "+lastName+"");
 	  }
 	  
 	  //Two
@@ -84,6 +89,7 @@ private NetflixAPI netApi;
 	    Optional<Movie> movie = Optional.fromNullable(netApi.getMovie(rat1));
 	    if (movie.isPresent()) {
 	      netApi.addRating(movie.get().id, rat2, rat3);
+	      System.out.println("Rating Added :)");
 	    }
 	  }
 
@@ -91,7 +97,7 @@ private NetflixAPI netApi;
 	  
 	  // Get User By email
 	  @Command(description = "Get a User's detail", abbrev = "zip") // ****not sure what this will do****
-	  public void getUser(@Param(name = "email") String zipcode) {
+	  public void getUser(@Param(name = "zipcode") String zipcode) {
 
 	    User user = netApi.getUserByZip(zipcode);
 	    System.out.println(user);
@@ -106,7 +112,7 @@ private NetflixAPI netApi;
 			Iterator<User> iter = sortedUsers.iterator();
 			while(iter.hasNext()) {
 				User u = iter.next();
-				System.out.println(u.firstName + " " + u.lastName);
+				System.out.println(u.firstName + " " + u.lastName+" "+u.zipcode);
 			}
 		}
 	  
@@ -117,7 +123,7 @@ private NetflixAPI netApi;
 			Iterator<Movie> iter = sortedMovies.iterator();
 			while(iter.hasNext()) {
 				Movie u = iter.next();
-				System.out.println(u.title);
+				System.out.println(u.title +" "+ u.id);
 			}
 		}
 	  
@@ -143,38 +149,70 @@ private NetflixAPI netApi;
 			}
 	  }
 		
-		// Get Movie By Title
-		@Command 
-		public void getMovieByTitle(String title) {
-			Movie movie = netApi.getMovieByTitle(title);
-			System.out.println(movie);
-		}	
 	  
-		
+		@Command(description = "Search a movie by name", abbrev = "title")
+		public void getMovieByTitle(String title) {
+			ArrayList<Movie> movie = new ArrayList<Movie>();
+			movie.addAll(netApi.getMovies());
+			for(int i = 0; i < movie.size(); i++) {
+				if(movie.get(i).title.toLowerCase().contains(title.toLowerCase())) {
+					System.out.println(movie.get(i));
+				}
+			}
+	  }
 		
 //DELETERS
 		
 	  //Delete User Administrator Only
-	  @Command(description = "Delete a User", abbrev = "delUser")
-	  public void deleteUser(@Param(name = "id") String id) {
-
-	    Optional<User> user = Optional.fromNullable(netApi.getUserByZip(id));
-	    if (user.isPresent()) {
-	      netApi.deleteUser(user.get().id);
-	    }
-	  }
 	  
 	  
-	  @Command(description = "Delete a Movie", abbrev = "delMovie")
-	  public void deleteMovie(@Param(name = "Url") String url) {
-
-	    Optional<Movie> movie = Optional.fromNullable(netApi.getMovieByUrl(url));
-	    if (movie.isPresent()) {
-	      netApi.deleteMovie(movie.get().url);
-	    }
-	  }
+	  @Command(description = "Delete a user(userId)", abbrev = "delUser")
+		public void removeUser(@Param(name = "userId") long userId) throws Exception {
+			User user = netApi.getUserId(userId);
+			netApi.deleteUser(userId);
+			System.out.println("\nUser: " + user.firstName + " has been deleted from the system.");
+		}
 	  
+	  @Command(description = "Delete a movie(movieId)", abbrev = "delMov")
+		public void deleteMovie(@Param(name = "movieId") long movieId) throws Exception {
+			Movie movie = netApi.getMovie(movieId);
+			netApi.deleteMovieId(movieId);
+			System.out.println("\nMovie: " + movie.title + " has been deleted from the system.");
+		}
+	  
+	   
+	  
+	  @Command(description = "Save info",abbrev= "save")
+		public String save() throws Exception {
+			netApi.store();
+			return "You successfully saved the information.";
+		}
 		
-		
+	  @Command(description = "Get all ratings for a specific movie(movieId)", abbrev="gmr")
+		public void getAllRatingsForMovie(@Param(name = "movieId") long movieId) {
+			List<Rating> ratingsMovie = netApi.getAllRatingsForMovie(movieId);
+			for (Rating rat : ratingsMovie) {
+				System.out.println("The ratings are:");
+				System.out.println(rat);
+				
+			}
+		}
 	  
+	  @Command(description = "Average movie rating(movieId)", abbrev="avg")
+		public double averageMovieRating(@Param(name = "movieID") Long movieId) {
+			double average = netApi.averageMovieRating(movieId);
+			return average;
+		}
+	  
+	  @Command(description = "Top 10 movies", abbrev="top10")
+		public void getTopTenMovies() {
+
+			List<Movie> topTenMovies = netApi.getTopTenMovies();
+			double score;
+
+			for (Movie mov : topTenMovies) {
+				score = netApi.averageMovieRating(mov.id);
+				System.out.println(topTenMovies.indexOf(mov) + 1 + ". " + mov.title + ", Score: " + score);
+			}
+		}
 }

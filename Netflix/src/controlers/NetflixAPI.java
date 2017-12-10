@@ -3,14 +3,19 @@ package controlers;
 import java.io.File;
 //import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.HashBasedTable;
 
 import util.FileLogger;
+import util.MovieComparator;
 import util.Serializer;
 import models.Movie;
 import models.Rating;
@@ -27,8 +32,10 @@ public class NetflixAPI {
 //	private Map<String, Rating> ratingIdIndex = new HashMap<>();
 	
 	private Serializer serializer;
-	Optional<User> currentUser;
+	public Optional<User> currentUser;
 
+	public HashBasedTable<Long, Long, Rating> ratingsTable = HashBasedTable.create();
+	
 	public NetflixAPI() {
 	}
 
@@ -120,6 +127,25 @@ public class NetflixAPI {
 		    }
 		  }
 	
+	// Calculate average movie rating
+		public double averageMovieRating(long movieId) {
+
+			Map<Long, Rating> ratingsMap = new HashMap<>();
+			
+			Movie mov = getMovie(movieId);
+			mov.ratings = 0; // reset to zero
+
+			// Create a column in ratingsTable
+			ratingsMap = ratingsTable.column(movieId);
+
+			for (Rating rat : ratingsMap.values())
+				mov.ratings += rat.rat3;
+
+			// Calculate the average rating of a movie
+			mov.ratings /= ratingsMap.size();
+
+			return mov.ratings;
+		}
 	
 //LOAD / STORE	
 	
@@ -171,18 +197,26 @@ public class NetflixAPI {
 			return ratingIndex.get(id);
 		}
 		
-		/*
-		public Map<Long, Rating> getUserRating(long id) {
-			Optional<User> user = Optional.fromNullable(userIndex.get(id));
-			return user.get().userRatings;
-		}
-		
-		public Map<Long, Rating> getMovieRating(long id) {
-			Optional<Movie> movie = Optional.fromNullable(movieIndex.get(id));
-			return movie.get().theMoviesRatings;
+		// Generate a list of Top 10 movies based on average rating score
+		public List<Movie> getTopTenMovies()
+		{
+			// Calculate average movie rating for every movie
+			for(Movie mov : movieIndex.values())
+				averageMovieRating(mov.id);
 			
-	}
-*/
+			// Sort movies by rating
+			List<Movie> moviesList = new ArrayList<>(movieIndex.values());
+			MovieComparator movComparator = new MovieComparator();
+			Collections.sort(moviesList, movComparator);
+			
+			// Return all the movies if they're less than 10
+			if(moviesList.size() < 10){
+				return moviesList;
+			} else {
+				return moviesList.subList(0, 10);
+			}
+		}
+
 		//Get Movie
 		public Movie getMovie(Long id) {
 			return movieIndex.get(id);
@@ -207,6 +241,10 @@ public class NetflixAPI {
 		public Movie getMovieByUrl(String url){
 			return movieIdIndex.get(url);
 		}
+		
+		
+		
+		
 		
 //DELETERS
 		
@@ -240,6 +278,12 @@ public class NetflixAPI {
 		movieIndex.remove(movie.url);
 	}
 	
+	public void deleteMovieId(Long id) {
+		Movie movie = movieIndex.remove(id);
+		movieIndex.remove(movie.id);
+	}
+	
+	
 	//Delete User Name
 	public void deleteUser(String name) {
 		User user = userIndex.remove(name);
@@ -257,6 +301,8 @@ public class NetflixAPI {
 		ratingIndex.clear();
 
 	}
+	
+	
 	
 //GET DATA FROM FILES USERS AND MOVIES METHOD	
 	
@@ -324,5 +370,29 @@ public class NetflixAPI {
 		scanner3.close();
 	}
 	
+//RATINGS!!!
+	
+	// Get all ratings from a user
+		public List<Rating> getUserRatings(long userId) {
+			List<Rating> userRatings = new ArrayList<>();
+			userRatings.addAll(ratingsTable.row(userId).values());
+
+			return userRatings;
+		}
+
+		// Get all the ratings for a specific movie
+		public List<Rating> getAllRatingsForMovie(long movieId) {
+			List<Rating> ratingsMovie = new ArrayList<>();
+			ratingsMovie.addAll(ratingsTable.column(movieId).values());
+
+			return ratingsMovie;
+		}
+
+		// Remove rating for a movie from specific user
+		public Rating removeRating(long userId, long movieId) {
+			return ratingsTable.remove(userId, movieId);
+		}
+
+		
 	
 }

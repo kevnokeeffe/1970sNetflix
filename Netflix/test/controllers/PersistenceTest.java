@@ -1,37 +1,57 @@
 package controllers;
 
-import models.User;
+
+
+
+
+	import static org.junit.Assert.*;
+	import org.junit.Test;
+
 import controlers.NetflixAPI;
+import models.Movie;
+	import models.User;
+	import models.Rating;
+	import static models.Fixtures.users;
+	import static models.Fixtures.movies;
+	import static models.Fixtures.ratings;
 
-public class PersistenceTest {
-/*
-	NetflixAPI netflix;
+	// JUnit test case for testing the persistence of the application
+	public class PersistenceTest {
 
-	 void populate (NetflixAPI netflix)
-	 {
-	 for (User user : users)
-	 {
-	 netflix.createUser(user.firstName, user.lastName, user.email, user.password);
-	 }
-	 User user1 = netflix.getUserByEmail(users[0].email);
-	 Activity activity = netflix.createActivity(user1.id, activities[0].type, activities[0].location, activities[0].distance);
-	 netflix.createActivity(user1.id, activities[1].type, activities[1].location, activities[1].distance);
-	 User user2 = netflix.getUserByEmail(users[1].email);
-	 netflix.createActivity(user2.id, activities[2].type, activities[2].location, activities[2].distance);
-	 netflix.createActivity(user2.id, activities[3].type, activities[3].location, activities[3].distance);
+		NetflixAPI netApi;
+		
+		void generate(NetflixAPI netApi){
+			for(User user : users){
+				netApi.createUser(user.firstName, user.lastName, user.age, user.gender, user.occupation, user.zipcode, user.role);
+			}
+			for(Movie movie : movies){
+				netApi.addMovie(movie.title, movie.year, movie.url);
+			}
+			for(Rating rating : ratings){
+				netApi.addRating(rating.rat1, rating.rat2, rating.rat3);
+			}
+		}
+		
+		@Test
+		public void testEmpty(){
+			netApi = new NetflixAPI(null);
+			assertEquals(0, netApi.movieIndex.size());
+			assertEquals(0, netApi.ratingsTable.size());
+			assertEquals(0, netApi.userIndex.size());
+			generate(netApi);
+		}
+		
+		@Test
+		public void testGenerate(){
+			netApi = new MovieRecommenderAPI(null);
+			assertEquals(0, netApi.movieIndex.size());
+			assertEquals(0, netApi.ratingsTable.size());
+			assertEquals(0, netApi.userIndex.size());
+			generate(netApi);
+			
+			assertEquals(4, netApi.getUsers().size());
+			assertEquals(4, netApi.getMovies().size());
+		}
 
-	 for (Location location : locations)
-	 {
-		 netflix.addLocation(activity.id, location.latitude, location.longitude);
-	 }
-	 }
-
-	 void deleteFile(String fileName)
-	 {
-	 File datastore = new File ("testdatastore.xml");
-	 if (datastore.exists())
-	 {
-	 datastore.delete();
-	 }
-	 */
+	}
 }
